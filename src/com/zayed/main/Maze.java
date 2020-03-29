@@ -4,30 +4,62 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Stack;
 
+/**
+ * 
+ * @author Zayed
+ *
+ */
 public class Maze {
 
-	private int cols, rows;
-	private int cellSize;
-	private boolean solved = false;
+	private int cols, rows; // dimensions in units of cells
+	private int cellSize; // size of 1 cell in pixels
+	private boolean solved = false; // solve the maze or not
 
+	/**
+	 * Cell State, as in the state every cell in the array is
+	 * 
+	 * @author Zayed
+	 *
+	 */
 	private enum CellState {
 		WALL, EMPTY, PATH, START, STOP, SOLUTION
 	}
 
-	private CellState[][] maze;
+	private CellState[][] maze; // main data structure
 
+	/**
+	 * a cell in the maze
+	 * 
+	 * @author Zayed
+	 *
+	 */
 	private class Cell {
-		public int x, y;
+		public int x, y; // position
 
+		/**
+		 * Constructor
+		 * 
+		 * @param x -> column position
+		 * @param y -> row position
+		 */
 		public Cell(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
 	}
 
+	// start and stop positions of the maze
 	private Cell startPosition;
 	private Cell stopPosition;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param w     -> width of canvas
+	 * @param h     -> height of canvas
+	 * @param size  -> size in pixels
+	 * @param solve -> solve maze or no
+	 */
 	public Maze(int w, int h, int size, boolean solve) {
 		cols = w / size;
 		rows = h / size;
@@ -46,10 +78,20 @@ public class Maze {
 		generate();
 	}
 
+	/**
+	 * Constructor
+	 * 
+	 * @param w    -> width of canvas
+	 * @param h    -> height of canvas
+	 * @param size -> size in pixels
+	 */
 	public Maze(int w, int h, int size) {
 		this(w, h, size, false);
 	}
 
+	/**
+	 * initialize maze array
+	 */
 	private void configure() {
 
 		maze = new CellState[cols][rows];
@@ -86,6 +128,9 @@ public class Maze {
 
 	}
 
+	/**
+	 * generate the maze
+	 */
 	private void generate() {
 		Cell current, next;
 		Stack<Cell> history = new Stack<Cell>();
@@ -121,15 +166,24 @@ public class Maze {
 
 	}
 
+	/**
+	 * check around for another cell to go on
+	 * 
+	 * @param current -> current cell
+	 * @param target  -> target cell state we're looking for
+	 * @param dist    -> distance between current and desired cells
+	 * @return
+	 */
 	private Cell checkNext(Cell current, CellState target, int dist) {
 
-		final int n = 4;
+		final int n = 4; // number of neighbors
 
+		// the options of cells
 		Cell[] options = { new Cell(current.x, current.y + dist), new Cell(current.x, current.y - dist),
 				new Cell(current.x + dist, current.y), new Cell(current.x - dist, current.y) };
 
-		boolean[] goodIndices = new boolean[n];
-		int nGood = 0;
+		boolean[] goodIndices = new boolean[n]; // the options
+		int nGood = 0; // number of good 
 
 		for (int i = 0; i < n; i++) {
 			Cell c = options[i];
@@ -142,17 +196,20 @@ public class Maze {
 		}
 
 		if (nGood == 0)
-			return null;
+			return null; // if there are no neighbors
 
 		int rand = (int) (Math.random() * n);
 		while (!goodIndices[rand]) {
 			rand = (int) (Math.random() * n);
 		}
 
-		return options[rand];
+		return options[rand]; // return the random neighbor
 
 	}
 
+	/**
+	 * solve the maze
+	 */
 	private void solve() {
 		Cell current, next;
 		Stack<Cell> history = new Stack<Cell>();
@@ -160,6 +217,7 @@ public class Maze {
 		current = new Cell(startPosition.x + 1, startPosition.y);
 		maze[current.x][current.y] = CellState.SOLUTION;
 
+		// while 
 		while (current.x != stopPosition.x - 1 || current.y != stopPosition.y) {
 
 			next = checkNext(current, CellState.PATH, 1);
@@ -176,6 +234,10 @@ public class Maze {
 		}
 	}
 
+	/**
+	 * draw the maze
+	 * @param g -> tool to draw
+	 */
 	public void draw(Graphics g) {
 
 		for (int i = 0; i < cols; i++) {

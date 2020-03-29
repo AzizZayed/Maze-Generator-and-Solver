@@ -9,20 +9,32 @@ import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * @author Zayed
+ *
+ */
 public class MazeGenerator extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 
+	// window dimensions 
 	private static final int WIDTH = 1010;
 	private static final int HEIGHT = 610;
 	
-	private Maze maze;
+	private Maze maze; // maze
 
+	/**
+	 * Constructor
+	 */
 	public MazeGenerator() {
 		canvasSetup();
 		initialize();
 	}
 
+	/**
+	 * just to setup the canvas to our desired settings and sizes
+	 */
 	private void canvasSetup() {
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.setMaximumSize(new Dimension(WIDTH, HEIGHT));
@@ -46,6 +58,9 @@ public class MazeGenerator extends JPanel{
 		});
 	}
 	
+	/**
+	 * initialize all our game objects
+	 */
 	private void initialize() {
 		maze = new Maze(WIDTH, HEIGHT, 10, true);
 	}
@@ -56,15 +71,27 @@ public class MazeGenerator extends JPanel{
 		drawGame(g);
 	}
 
+	/**
+	 * Draw the background
+	 * @param g -> tool to draw
+	 */
 	private void drawBackground(Graphics g) {
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 	}
 
+	/**
+	 * draw the game
+	 * @param g -> tool to draw
+	 */
 	private void drawGame(Graphics g) {
 		maze.draw(g);
 	}
 
+	/**
+	 * main method
+	 * @param args
+	 */
 	public static void main(String args[]) {
 		JFrame frame = new JFrame("Depth-First Search Maze Generator");
 		MazeGenerator game = new MazeGenerator();
