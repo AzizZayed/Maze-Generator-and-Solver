@@ -10,24 +10,25 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
+ * main class, handles input and drawing
  * 
  * @author Zayed
  *
  */
-public class MazeGenerator extends JPanel{
+public class MazeViewer extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	// window dimensions 
-	private static final int WIDTH = 1010;
-	private static final int HEIGHT = 610;
-	
+	// window dimensions
+	private static final int WIDTH = 510; // width in pixels
+	private static final int HEIGHT = 510; // height in pixels
+
 	private Maze maze; // maze
 
 	/**
 	 * Constructor
 	 */
-	public MazeGenerator() {
+	public MazeViewer() {
 		canvasSetup();
 		initialize();
 	}
@@ -42,59 +43,45 @@ public class MazeGenerator extends JPanel{
 
 		this.setFocusable(true);
 
-		this.addKeyListener(new KeyAdapter( ) {
-			
+		this.addKeyListener(new KeyAdapter() {
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 				int code = e.getKeyCode();
-				
+
 				if (code == KeyEvent.VK_R)
 					initialize();
-				
+
 				repaint();
 			}
 
-			
 		});
 	}
-	
+
 	/**
 	 * initialize all our game objects
 	 */
 	private void initialize() {
-		maze = new Maze(WIDTH, HEIGHT, 10, true);
+		maze = new Maze(WIDTH, HEIGHT, 10);
 	}
 
 	@Override
 	public void paintComponent(Graphics g) {
-		drawBackground(g);
-		drawGame(g);
-	}
-
-	/**
-	 * Draw the background
-	 * @param g -> tool to draw
-	 */
-	private void drawBackground(Graphics g) {
+		// Draw the background
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
-	}
 
-	/**
-	 * draw the game
-	 * @param g -> tool to draw
-	 */
-	private void drawGame(Graphics g) {
-		maze.draw(g);
+		maze.draw(g); // draw the game
 	}
 
 	/**
 	 * main method
+	 * 
 	 * @param args
 	 */
 	public static void main(String args[]) {
-		JFrame frame = new JFrame("Depth-First Search Maze Generator");
-		MazeGenerator game = new MazeGenerator();
+		JFrame frame = new JFrame("Backtracker Maze Generator");
+		MazeViewer game = new MazeViewer();
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
